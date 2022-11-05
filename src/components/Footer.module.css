@@ -1,0 +1,12 @@
+.footerContainer{
+    width:100%;
+    background-color: var(--clr-accent);
+    height:100px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.tmdbLink{
+    text-decoration: none;
+    color:white;
+}
