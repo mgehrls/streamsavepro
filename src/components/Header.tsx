@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { faMagnifyingGlass, faX, faList, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faList, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,7 +35,7 @@ const Header = ({signIn, signOut, session}: HeaderPropType) => {
     }
 
     return (
-        <header className="flex justify-between items-center p-2 gap-4 bg-slate-600 fixed h-16 w-full text-white">
+        <header className="flex justify-between items-center p-2 gap-4 bg-slate-600 fixed h-16 w-full text-white top-0">
             <Logo/>
             <SearchBar/>
             <ProfileSection {...profileSectionProps} />
@@ -44,7 +44,7 @@ const Header = ({signIn, signOut, session}: HeaderPropType) => {
 
  const Logo = () =>{
     return (
-        <div>
+        <div className='hidden md:block'>
             <Link  
                 href={"/"} >
                 <h1>StreamSave</h1>

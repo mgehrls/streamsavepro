@@ -2,13 +2,27 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-
+import Slider from "../components/Slider";
 import { trpc } from "../utils/trpc";
 import Header from "../components/Header";
 
 const Home: NextPage = () => {
-  const {data: session, status} = useSession()
+  const { data: session, status } = useSession()
+  const { data: trending } = trpc.media.getTrendingData.useQuery()
+  const { data: user } = trpc.user.getUser.useQuery()
+  const { data: listItems } = trpc.listItem.getUserListItems.useQuery()
+  const addListItemToDB = trpc.listItem.newListItem.useMutation()
+  const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
+  const utils = trpc.useContext()
   const headerProps = {signIn, signOut, session}
+
+  if(!trending || status === "loading") return <>Loading</>
+
+  const sliderProps = {
+    trending: trending,
+    listItems: listItems
+  }
+
   return (
     <>
       <Head>
@@ -17,6 +31,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header {...headerProps}/>
+      <div className="bg-slate-300 mt-16 flex justify-center">
+        <Slider {...sliderProps} />
+      </div>
     </>
   );
 };
