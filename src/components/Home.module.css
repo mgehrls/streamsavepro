@@ -111,15 +111,7 @@
 
 
 /* SidebarList */
-.sidebarContainer{
-    background-color: var(--clr-light-accent);
-    color: var(--clr-dark);
-    display:flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 65px;
-}
+
 .listItemContainer{
     padding:10px;
     display:flex;

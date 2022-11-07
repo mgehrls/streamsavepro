@@ -1,26 +1,41 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Slider from "../components/Slider";
 import { trpc } from "../utils/trpc";
 import Header from "../components/Header";
+import SidebarList from "../components/SidebarList";
+import Hero from "../components/Hero";
+import { Media } from "../types/interface";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
   const { data: trending } = trpc.media.getTrendingData.useQuery()
   const { data: user } = trpc.user.getUser.useQuery()
-  const { data: listItems } = trpc.listItem.getUserListItems.useQuery()
+  const { data: listItems, status: listItemStatus } = trpc.listItem.getUserListItems.useQuery()
   const addListItemToDB = trpc.listItem.newListItem.useMutation()
   const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
-  const utils = trpc.useContext()
+  const router = useRouter()
   const headerProps = {signIn, signOut, session}
 
-  if(!trending || status === "loading") return <>Loading</>
+  const addListItem = (newListItem:{media:Media, userID:string}) =>{
+    addListItemToDB.mutate(newListItem, {onSuccess:async ()=>{ router.reload()}})
+    return addListItemToDB.isLoading ? true : false
+  }
+  const removeListItem = (id:string) =>{
+    removeListItemFromDB.mutate(id, {onSuccess:async ()=>{ router.reload()}})
+    return removeListItemFromDB.isLoading ? true : false
+  }
 
-  const sliderProps = {
+  if(!trending || status === "loading" || listItemStatus === "loading" || user === undefined) return <>Loading</>
+
+  const heroProps = {
     trending: trending,
-    listItems: listItems
+    listItems: listItems,
+    addListItem: addListItem,
+    removeListItem: removeListItem,
+    session: session,
+    user: user
   }
 
   return (
@@ -31,8 +46,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header {...headerProps}/>
-      <div className="bg-slate-300 mt-16 flex justify-center">
-        <Slider {...sliderProps} />
+      <div className="bg-slate-300 mt-16 z-0">
+        <div className="flex justify-center max-w-8xl">
+          <Hero {...heroProps} />
+          {listItems && <SidebarList />}
+        </div>
       </div>
     </>
   );

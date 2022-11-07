@@ -82,22 +82,6 @@ export interface ResultProps{
     removeListItem:(id: string) => boolean;
 }
 
-export interface TrendingHeroPropTypes{
-  user:User | null | undefined;
-  trending: {
-    series: SearchResult[];
-    movies: SearchResult[];
-};
-  listItems:(ListItem & {
-    media: Media;
-})[] | undefined;
-  addListItem?: (newListItem: {
-  media: Media;
-  userID: string;
-}) => boolean;
-  removeListItem?:(id: string) => boolean;
-}
-
 export interface SearchProps{
   searchData: SearchData;
   listItems: (ListItem & {media: Media;})[] | undefined;
@@ -145,6 +129,25 @@ export interface ProfileSectionPropTypes {
   },
   show: boolean,
   setShow: React.Dispatch<React.SetStateAction<boolean>>
+}
+export interface UnauthedResultProps{
+  result: SearchResult;
+}
+export interface HeroPropTypes{
+  trending: {
+      series: SearchResult[];
+      movies: SearchResult[];
+  };
+  listItems: (ListItem & {
+      media: Media;
+  })[] | undefined;
+  addListItem: (newListItem: {
+    media: Media;
+    userID: string;
+}) => boolean;
+  removeListItem:(id: string) => boolean;
+  session: Session | null;
+  user: User | null;
 }
 export interface UnauthedResultProps{
   result: SearchResult;

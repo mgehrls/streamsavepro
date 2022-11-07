@@ -35,7 +35,7 @@ const Header = ({signIn, signOut, session}: HeaderPropType) => {
     }
 
     return (
-        <header className="flex justify-between items-center p-2 gap-4 bg-slate-600 fixed h-16 w-full text-white top-0">
+        <header className="flex justify-start items-center p-4 gap-4 bg-slate-600 fixed h-16 text-white top-0 z-50 w-screen">
             <Logo/>
             <SearchBar/>
             <ProfileSection {...profileSectionProps} />
@@ -67,7 +67,7 @@ const Header = ({signIn, signOut, session}: HeaderPropType) => {
     }
 
     return(
-        <form className="relative h-12 w-full flex justify-start items-center text-xs bg-pink-100 text-white"
+        <form className="relative h-12 flex justify-start items-center text-md text-white w-full"
             onSubmit={(e)=>{
             e.preventDefault()
             search()}}>

@@ -1,28 +1,21 @@
 import React from 'react'
 import SmallMediaDisplay from './SmallMediaDisplay'
-import styles from './Home.module.css'
 import {trpc} from '../utils/trpc'
-import type { PrismaListItem } from '../types/interface';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { ListItem, Media } from '../types/interface';
 
-export default function SidebarList() {
-  const userShows = trpc.user.getUserShows.useQuery()
-  const userMovies = trpc.user.getUserMovies.useQuery()
+const SidebarList = () => {
   const session = useSession()
+  const userShows = trpc.user.getUserShows.useQuery()
 
-  const convertToJSXFromListItemArray = (listItemArray: PrismaListItem[] | undefined) => {
-    if(!session){
-      return(
-        <div>
-          <p>Please Log In</p>
-          <button onClick={()=> signIn()}>Sign In</button>
-        </div>
-      )
-    }
+  function convertToJSXFromListItemArray(listItemArray: (ListItem & {media: Media;})[] | undefined){
+    if(!session) return <></>
     if(!listItemArray){
-      <div>Add Shows to your List to keep track of them here!</div>
+      return <></>
+    }else if(!listItemArray.length){
+      <div className='text-white font-bold'>Add Shows to your List to keep track of them here!</div>
     }else{
-      return listItemArray.map((item: PrismaListItem)=>{
+      return listItemArray.map((item)=>{
         const smallMediaDisplayProps={
           title: item.media.title,
           backdropPath: item.media.backdropPath ? item.media.backdropPath: "",
@@ -35,21 +28,18 @@ export default function SidebarList() {
       })
     }
   }
-if(!userMovies.data || !userShows.data) return <div>Loading...</div>
+  if(!userShows.data) return <div>Loading...</div>
 
-  const movieDisplay = convertToJSXFromListItemArray(userMovies.data)
   const tvDisplay = convertToJSXFromListItemArray(userShows.data)
 
+  if(!tvDisplay) return <></>
+
   return (
-    <aside id='list' className={styles.sidebarContainer}>
+  <aside id='list' className='hidden md:flex flex-col justify-start items-center mt-16 text-black bg-slate-400'>
     <h3>Your List</h3>
-    <div className={styles.sidebarSeriesContainer}>
       {tvDisplay}
-    </div>
-    <div className={styles.sidebarSeriesContainer}>
-      {movieDisplay}
-    </div>
   </aside>
   )
 }
 
+export default SidebarList
