@@ -5,9 +5,6 @@ import { SearchData, SearchResult } from "../../../types/interface";
 import { env } from "../../../env/server.mjs";
 
 export const mediaRouter = router({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.listItem.findMany()
-  }),
   getSearchResults: publicProcedure
     .input(z.string())
     .query(async (req) => {

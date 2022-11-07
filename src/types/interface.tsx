@@ -115,7 +115,10 @@ export interface SmallDisplayProps{
 export interface HeaderPropType {
   signIn:<P extends RedirectableProviderType | undefined = undefined>(provider?: LiteralUnion<P extends RedirectableProviderType ? P | BuiltInProviderType : BuiltInProviderType>, options?: SignInOptions, authorizationParams?: SignInAuthorizationParams)=> Promise<P extends RedirectableProviderType ? SignInResponse | undefined : undefined>,
   signOut:<R extends boolean = true>(options?: SignOutParams<R>)=> Promise<R extends true ? undefined : SignOutResponse>,
-  session: Session | null
+  session: Session | null,
+  listItems: (ListItem & {
+    media: Media;
+})[] | undefined;
 }
 
 export interface ProfileSectionPropTypes {
@@ -151,4 +154,9 @@ export interface HeroPropTypes{
 }
 export interface UnauthedResultProps{
   result: SearchResult;
+}
+export interface SearchbarPropType{
+  listItems: (ListItem & {
+    media: Media;
+})[] | undefined;
 }

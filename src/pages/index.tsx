@@ -16,8 +16,7 @@ const Home: NextPage = () => {
   const addListItemToDB = trpc.listItem.newListItem.useMutation()
   const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
   const router = useRouter()
-  const headerProps = {signIn, signOut, session}
-
+  
   const addListItem = (newListItem:{media:Media, userID:string}) =>{
     addListItemToDB.mutate(newListItem, {onSuccess:async ()=>{ router.reload()}})
     return addListItemToDB.isLoading ? true : false
@@ -26,9 +25,10 @@ const Home: NextPage = () => {
     removeListItemFromDB.mutate(id, {onSuccess:async ()=>{ router.reload()}})
     return removeListItemFromDB.isLoading ? true : false
   }
-
+  
   if(!trending || status === "loading" || listItemStatus === "loading" || user === undefined) return <>Loading</>
-
+  
+  const headerProps = {signIn, signOut, session, listItems}
   const heroProps = {
     trending: trending,
     listItems: listItems,
