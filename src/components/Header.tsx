@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { HeaderPropType, ListItem, Media, ProfileSectionPropTypes, SearchbarPropType, SearchData, SearchResult } from '../types/interface'
+import { HeaderPropType, Media, ProfileSectionPropTypes, SearchbarPropType, SearchData } from '../types/interface'
 import useDebounce from '../utils/useDebounce'
 import { trpc } from '../utils/trpc'
 import { signIn } from 'next-auth/react'
@@ -102,19 +102,20 @@ const Header = ({signIn, signOut, session, listItems}: HeaderPropType) => {
         const type = result.media_type !== undefined ? result.media_type : ""
         const backdropPath = result.backdrop_path !== undefined ? `https://image.tmdb.org/t/p/w342/${result.backdrop_path}` : null
         const posterPath = result.poster_path!== undefined ? `https://image.tmdb.org/t/p/w342/${result.poster_path}` : null
-        const linkAddress = result.media_type === "tv" ? `/series/${id}` : `movie/${id}`
-        const maxTitleCharacters = 25
+        //const linkAddress = result.media_type === "tv" ? `/series/${id}` : `movie/${id}`
+        //const maxTitleCharacters = 25
         
         const handleAdd = (itemToAdd:{media:Media, userID:string}) =>{
           addListItem(itemToAdd)
         }
+        /*
         const handleRemove = (id:string) =>{
           removeListItem(id)
         }
-
+*/
         if(listItems === undefined){
             return(
-            <div className='border border-black flex justify-between items-center h-20 relative'>
+            <div key={result.id} className='border border-black flex justify-between items-center h-20 relative'>
                 <Image height={100} width={50} src={`https://image.tmdb.org/t/p/w342/${result.poster_path}` || ""} alt={result.name || "poster"} />
                 <h2>{result.name}</h2>
                 <FontAwesomeIcon icon={faPlus} onClick={()=>signIn()}/>
@@ -122,7 +123,7 @@ const Header = ({signIn, signOut, session, listItems}: HeaderPropType) => {
             )
         }else if(listItems[0]=== undefined){
             return(
-                <div className='border border-black flex justify-between items-center h-20 relative'>
+                <div key={result.id} className='border border-black flex justify-between items-center h-20 relative'>
                     <Image height={100} width={50} src={`https://image.tmdb.org/t/p/w342/${result.poster_path}` || ""} alt={result.name || "poster"} />
                     <h2>{result.name}</h2>
                     <FontAwesomeIcon icon={faPlus} onClick={()=>signIn()}/>
@@ -142,7 +143,7 @@ const Header = ({signIn, signOut, session, listItems}: HeaderPropType) => {
               }
       
               return (
-                  <div className='border border-black flex justify-between items-center h-20 relative'>
+                  <div key={result.id} className='border border-black flex justify-between items-center h-20 relative'>
                       <Image height={100} width={50} src={`https://image.tmdb.org/t/p/w342/${result.poster_path}` || ""} alt={result.name || "poster"} />
                       <h2>{result.name}</h2>
                       <FontAwesomeIcon icon={faPlus} onClick={()=> handleAdd(newListItem)}/>
