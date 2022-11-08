@@ -1,7 +1,7 @@
 import React from 'react'
 import SmallMediaDisplay from './SmallMediaDisplay'
 import { useSession } from 'next-auth/react';
-import { ListItem, Media, SideBarPropTypes } from '../types/interface';
+import type { ListItem, Media, SideBarPropTypes } from '../types/interface';
 
 const SidebarList = ({listItems, removeListItem}: SideBarPropTypes) => {
   const session = useSession()

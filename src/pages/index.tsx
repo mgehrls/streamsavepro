@@ -5,7 +5,7 @@ import { trpc } from "../utils/trpc";
 import Header from "../components/Header";
 import SidebarList from "../components/SidebarList";
 import Hero from "../components/Hero";
-import { Media } from "../types/interface";
+import type { Media } from "../types/interface";
 import { useState } from "react";
 
 

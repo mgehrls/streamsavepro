@@ -3,7 +3,7 @@ import Image from "next/image"
 import React, { useState } from 'react';
 import {trpc} from "../utils/trpc"
 import { useRouter } from 'next/router';
-import { SmallDisplayProps } from '../types/interface';
+import type { SmallDisplayProps } from '../types/interface';
 
 const SmallMediaDisplay = ({title, posterPath, lastSeen, listID, removeListItem}: SmallDisplayProps)=>{
     const [hide, setHide] = useState(true)

@@ -1,9 +1,8 @@
 import { faPlus, faMagnifyingGlass, faMinus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Media } from "@prisma/client"
 import { signIn } from "next-auth/react"
 import { useState, useEffect } from "react"
-import { SearchbarPropType, SearchData } from "../types/interface"
+import type { SearchbarPropType, SearchData, Media } from "../types/interface"
 import useDebounce from "../utils/useDebounce"
 import Image from "next/image"
 
@@ -88,7 +87,7 @@ const SearchBar = ({listItems, addListItem, removeListItem, session}: SearchbarP
                 )
           }else{
             return(
-                <div>Error</div>
+                <div key={result.id}>Error</div>
             )
           }})
 

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { faList, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HeaderPropType} from '../types/interface'
+import type { HeaderPropType} from '../types/interface'
 import SearchBar from './SearchBar'
 
 const Header = ({signIn, signOut, session, listItems, show, setShow, addListItem, removeListItem}: HeaderPropType) => {
