@@ -31,8 +31,8 @@ const Home: NextPage = () => {
   
   if(!trending || session.status === "loading" || listItems.isLoading || user.isLoading){
     return (
-      <div className="w-screen h-screen bg-slate-600 flex justify-center items-center">
-        <FontAwesomeIcon spin icon={faSpinner}/>
+      <div className="w-screen h-screen bg-slate-600 flex flex-col gap-8 justify-center items-center">
+        <FontAwesomeIcon spin icon={faSpinner} size={"10x"}/>
         <div className="text-white font-bold cursor-pointer p-6 bg-black">Loading...</div>
       </div>)
   } else if(listItems.error || user.error || session.status === "unauthenticated"){
