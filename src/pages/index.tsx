@@ -8,12 +8,11 @@ import Hero from "../components/Hero";
 import type { Media } from "../types/interface";
 import { useState } from "react";
 
-
 const Home: NextPage = () => {
-  const { data: session, status } = useSession()
+  const session = useSession()
   const { data: trending } = trpc.media.getTrendingData.useQuery()
-  const { data: user } = trpc.user.getUser.useQuery()
-  const { data: listItems, status: listItemStatus } = trpc.listItem.getUserListItems.useQuery()
+  const user = trpc.user.getUser.useQuery()
+  const listItems = trpc.listItem.getUserListItems.useQuery()
   const addListItemToDB = trpc.listItem.newListItem.useMutation()
   const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
   const utils = trpc.useContext()
@@ -28,16 +27,22 @@ const Home: NextPage = () => {
     return removeListItemFromDB.isLoading ? true : false
   }
   
-  if(!trending || status === "loading" || listItemStatus === "loading" || user === undefined) return <>Loading</>
-  const sidebarProps = {listItems, removeListItem}
-  const headerProps = {signIn, signOut, session, listItems, show, setShow, addListItem, removeListItem}
+  if(!trending || session.status === "loading" || listItems.isLoading || user.isLoading){
+    return <div>Loading</div>
+  } else if(listItems.error || user.error || session.status === "unauthenticated"){
+    return <div onClick={()=>signIn()}>Sign In</div>
+  }else{
+  const sidebarProps = {
+    listItems: listItems.data, 
+    removeListItem}
+  const headerProps = {signIn, signOut, session: session.data, listItems: listItems.data, show, setShow, addListItem, removeListItem}
   const heroProps = {
     trending: trending,
-    listItems: listItems,
+    listItems: listItems.data ? listItems.data : undefined,
     addListItem: addListItem,
     removeListItem: removeListItem,
-    session: session,
-    user: user,
+    session: session.data,
+    user: user.data ? user.data : null
   }
 
   return (
@@ -56,6 +61,6 @@ const Home: NextPage = () => {
       </div>
     </>
   );
-};
+}};
 
 export default Home;

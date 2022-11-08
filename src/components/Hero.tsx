@@ -57,7 +57,9 @@ const UnauthedResult = ({result}: UnauthedResultProps) =>{
   const maxTitleCharacters = 25
 
   return(
-    <Image src={`https://image.tmdb.org/t/p/w342/${result.backdrop_path}`} alt={result.name || "show backdrop"} className="relative">
+    <Image src={`https://image.tmdb.org/t/p/w342/${result.backdrop_path}`} alt={result.name || "show backdrop"} className="relative"
+      width={300}
+      height={163}>
       <div ref={hoverRef} className={'w-full h-full'}>
         <div onClick={()=>signIn()}>
               <p>Sign in to Add</p>
