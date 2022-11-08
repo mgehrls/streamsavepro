@@ -11,7 +11,7 @@ function Hero({trending, listItems, addListItem, removeListItem, user}: HeroProp
   const trendingSeries = trending.series;
 
   return (
-    <div className='m-6 xs:w-screen sm:max-w-7xl relative flex flex-wrap justify-center'>
+    <div className='xs:w-screen sm:max-w-7xl relative flex flex-wrap justify-center'>
       {trendingSeries.map((result) => {
         if(user === null){
           return(
@@ -109,7 +109,7 @@ const Result = ({result, listItem, user, addListItem, removeListItem}: ResultPro
     }
   }
     return(
-      <div ref={hoverRef} key={id} className={'flex justify-between items-center gap-2 p-6 text-white drop-shadow'}>
+      <div ref={hoverRef} key={id} className={'flex justify-between items-center gap-2 text-white'}>
       <div className='flex flex-col items-center relative w-max'>
         <Image 
           className='w-full m-0 p-0'

@@ -1,12 +1,10 @@
 import React from 'react'
 import SmallMediaDisplay from './SmallMediaDisplay'
-import {trpc} from '../utils/trpc'
 import { useSession } from 'next-auth/react';
-import { ListItem, Media } from '../types/interface';
+import { ListItem, Media, SideBarPropTypes } from '../types/interface';
 
-const SidebarList = () => {
+const SidebarList = ({listItems, removeListItem}: SideBarPropTypes) => {
   const session = useSession()
-  const userShows = trpc.user.getUserShows.useQuery()
 
   function convertToJSXFromListItemArray(listItemArray: (ListItem & {media: Media;})[] | undefined){
     if(!session) return <></>
@@ -23,14 +21,15 @@ const SidebarList = () => {
           id: item.media.id,
           listID: item.id,
           lastSeen: item.lastSeen ? item.lastSeen : null,
+          removeListItem: removeListItem
         }
         return <SmallMediaDisplay key={item.id} {...smallMediaDisplayProps} />
       })
     }
   }
-  if(!userShows.data) return <div>Loading...</div>
+  if(!listItems) return <div>Loading...</div>
 
-  const tvDisplay = convertToJSXFromListItemArray(userShows.data)
+  const tvDisplay = convertToJSXFromListItemArray(listItems)
 
   if(!tvDisplay) return <></>
 

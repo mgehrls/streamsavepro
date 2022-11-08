@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import { Session } from "next-auth/core/types";
 import { RedirectableProviderType, BuiltInProviderType } from "next-auth/providers";
 import { LiteralUnion, SignInOptions, SignInAuthorizationParams, SignInResponse, SignOutParams, SignOutResponse } from "next-auth/react";
+import { Dispatch, SetStateAction } from "react";
 
 export interface ListItem{
     id: string;
@@ -110,6 +111,7 @@ export interface SmallDisplayProps{
   id:number;
   lastSeen?: string | null;
   listID: string;
+  removeListItem: (id: string) => boolean
 }
 
 export interface HeaderPropType {
@@ -119,6 +121,13 @@ export interface HeaderPropType {
   listItems: (ListItem & {
     media: Media;
 })[] | undefined;
+  show: boolean;
+  setShow: Dispatch<SetStateAction<boolean>>;
+  addListItem: (newListItem: {
+    media: Media;
+    userID: string;
+}) => boolean;
+  removeListItem:(id: string) => boolean;
 }
 
 export interface ProfileSectionPropTypes {
@@ -159,4 +168,16 @@ export interface SearchbarPropType{
   listItems: (ListItem & {
     media: Media;
 })[] | undefined;
+addListItem: (newListItem: {
+  media: Media;
+  userID: string;
+}) => boolean;
+removeListItem:(id: string) => boolean;
+session: Session | null
+}
+export interface SideBarPropTypes {
+  listItems:(ListItem & {
+    media: Media;
+})[] | undefined;
+  removeListItem: (id: string) => boolean
 }

@@ -5,11 +5,10 @@ import {trpc} from "../utils/trpc"
 import { useRouter } from 'next/router';
 import { SmallDisplayProps } from '../types/interface';
 
-const SmallMediaDisplay = ({title, posterPath, lastSeen, listID}: SmallDisplayProps)=>{
+const SmallMediaDisplay = ({title, posterPath, lastSeen, listID, removeListItem}: SmallDisplayProps)=>{
     const [hide, setHide] = useState(true)
     const router = useRouter()
     const updateListItem = trpc.listItem.updateListItem.useMutation({onSuccess(){router.reload()}})
-    const removeListItem = trpc.listItem.removeListItem.useMutation({onSuccess(){router.reload()}})
     let dateDisplay
 
     if(lastSeen !== undefined && lastSeen !== null){
@@ -34,7 +33,7 @@ const SmallMediaDisplay = ({title, posterPath, lastSeen, listID}: SmallDisplayPr
                     <div className={styles.listItemLastSeenContainer}>
                         {dateDisplay}
                     </div>
-                    <p className={styles.listItemRemove} onClick={()=> removeListItem.mutate(listID)}>remove</p>
+                    <p className={styles.listItemRemove} onClick={()=> removeListItem(listID)}>remove</p>
                 </div>
             </div>
     )}else{
