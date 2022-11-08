@@ -5,15 +5,11 @@ import { z } from "zod";
 export const listItemRouter = router({
   getUserListItems: protectedProcedure
     .query(async ({ctx}) => {
-      try {
         return await ctx.prisma.listItem.findMany({where:{
           userID: ctx.session.user.id
         },include:{
           media:true
         }})
-      } catch (error) {
-        console.log(error)
-      }
      
     }),
   removeListItem: protectedProcedure
