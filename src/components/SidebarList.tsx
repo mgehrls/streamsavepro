@@ -34,7 +34,7 @@ const SidebarList = ({listItems, removeListItem}: SideBarPropTypes) => {
   if(!tvDisplay) return <></>
 
   return (
-  <aside id='list' className='hidden md:flex flex-col justify-start items-center mt-16 text-black bg-slate-400'>
+  <aside id='list' style={{maxHeight:"calc(100vh - 4rem)"}} className='hidden md:flex flex-col overflow-x-hidden overflow-y-auto justify-start items-center text-black bg-slate-400'>
     <h3>Your List</h3>
       {tvDisplay}
   </aside>

@@ -91,14 +91,12 @@ const SearchBar = ({listItems, addListItem, removeListItem, session}: SearchbarP
             )
           }})
 
-      
-
-
     return(
         <div className='flex flex-col relative w-full'>
             <div className="relative h-12 flex justify-start items-center text-md text-white w-full">
                 <FontAwesomeIcon className="h-6 m-2 absolute" icon={faMagnifyingGlass}/>
-                <input 
+                <input
+                    id="searchBar" 
                     className="w-full h-full pl-10 bg-zinc-900 text-white"
                     onChange={(e)=> setSearch(e.target.value)}
                     type="search" 

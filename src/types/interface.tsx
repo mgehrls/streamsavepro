@@ -62,13 +62,6 @@ export interface ShowData{
   lastSeen?:string;
   tier?:"s" | "a" | "b" | "c" | "g";
 }
-export interface PrismaListItem{
-  id:string,
-  lastSeen: string | null,
-  media: Media,
-  mediaID: number,
-  userID: string,
-}
 
 export interface ResultProps{
   result: SearchResult;
@@ -82,7 +75,6 @@ export interface ResultProps{
   }) => boolean;
     removeListItem:(id: string) => boolean;
 }
-
 export interface SearchProps{
   searchData: SearchData;
   listItems: (ListItem & {media: Media;})[] | undefined;
@@ -113,7 +105,6 @@ export interface SmallDisplayProps{
   listID: string;
   removeListItem: (id: string) => boolean
 }
-
 export interface HeaderPropType {
   signIn:<P extends RedirectableProviderType | undefined = undefined>(provider?: LiteralUnion<P extends RedirectableProviderType ? P | BuiltInProviderType : BuiltInProviderType>, options?: SignInOptions, authorizationParams?: SignInAuthorizationParams)=> Promise<P extends RedirectableProviderType ? SignInResponse | undefined : undefined>,
   signOut:<R extends boolean = true>(options?: SignOutParams<R>)=> Promise<R extends true ? undefined : SignOutResponse>,
@@ -145,7 +136,7 @@ export interface ProfileSectionPropTypes {
 export interface UnauthedResultProps{
   result: SearchResult;
 }
-export interface HeroPropTypes{
+export interface TrendingPropTypes{
   trending: {
       series: SearchResult[];
       movies: SearchResult[];
