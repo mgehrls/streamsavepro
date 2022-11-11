@@ -18,12 +18,12 @@ const SidebarList = ({listItems, removeListItem}: SideBarPropTypes) => {
           title: item.media.title,
           backdropPath: item.media.backdropPath ? item.media.backdropPath: "",
           posterPath: item.media.posterPath ? item.media.posterPath : "",
-          id: item.media.id,
-          listID: item.id,
+          mediaID: item.mediaID,
+          userID: item.userID,
           lastSeen: item.lastSeen ? item.lastSeen : null,
           removeListItem: removeListItem
         }
-        return <SmallMediaDisplay key={item.id} {...smallMediaDisplayProps} />
+        return <SmallMediaDisplay key={item.mediaID} {...smallMediaDisplayProps} />
       })
     }
   }

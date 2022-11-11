@@ -5,7 +5,6 @@ import { LiteralUnion, SignInOptions, SignInAuthorizationParams, SignInResponse,
 import { Dispatch, SetStateAction } from "react";
 
 export interface ListItem{
-    id: string;
     userID: string;
     mediaID: number;
     lastSeen: string | null;
@@ -73,7 +72,7 @@ export interface ResultProps{
     media: Media;
     userID: string;
   }) => boolean;
-    removeListItem:(id: string) => boolean;
+  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }
 export interface SearchProps{
   searchData: SearchData;
@@ -83,7 +82,7 @@ export interface SearchProps{
     media: Media;
     userID: string;
   }) => boolean;
-  removeListItem:(id: string) => boolean;
+  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }
 export interface SearchResultProps {
   result: SearchResult;
@@ -93,17 +92,17 @@ export interface SearchResultProps {
     media: Media;
     userID: string;
   }) => boolean;
-    removeListItem:(id: string) => boolean;
+  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }
 
 export interface SmallDisplayProps{
   title:string;
   backdropPath?:string;
   posterPath?:string;
-  id:number;
+  userID:string;
+  mediaID: number;
   lastSeen?: string | null;
-  listID: string;
-  removeListItem: (id: string) => boolean
+  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }
 export interface HeaderPropType {
   signIn:<P extends RedirectableProviderType | undefined = undefined>(provider?: LiteralUnion<P extends RedirectableProviderType ? P | BuiltInProviderType : BuiltInProviderType>, options?: SignInOptions, authorizationParams?: SignInAuthorizationParams)=> Promise<P extends RedirectableProviderType ? SignInResponse | undefined : undefined>,
@@ -118,7 +117,7 @@ export interface HeaderPropType {
     media: Media;
     userID: string;
 }) => boolean;
-  removeListItem:(id: string) => boolean;
+removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }
 
 export interface ProfileSectionPropTypes {
@@ -148,7 +147,7 @@ export interface TrendingPropTypes{
     media: Media;
     userID: string;
 }) => boolean;
-  removeListItem:(id: string) => boolean;
+removeListItem:(data:{userID: string, mediaID:number}) => boolean;
   session: Session | null;
   user: User | null;
 }
@@ -163,12 +162,12 @@ addListItem: (newListItem: {
   media: Media;
   userID: string;
 }) => boolean;
-removeListItem:(id: string) => boolean;
+removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 session: Session | null
 }
 export interface SideBarPropTypes {
   listItems:(ListItem & {
     media: Media;
 })[] | undefined;
-  removeListItem: (id: string) => boolean
+removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 }

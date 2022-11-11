@@ -19,22 +19,23 @@ model User {
 }
 
 model Media {
+  id           Int        @id @unique
   title        String
   description  String?
   type         String
   backdropPath String?
   posterPath   String?
-  id           Int       @id @unique
-  lists        ListItem?
+  lists        ListItem[]
 }
 
 model ListItem {
-  id       String  @id @default(cuid())
   userID   String
   lastSeen String?
-  mediaID  Int     @unique
+  mediaID  Int
   media    Media   @relation(fields: [mediaID], references: [id])
   user     User    @relation(fields: [userID], references: [id])
+
+  @@id([userID, mediaID])
 }
 
 model Account {

@@ -82,7 +82,7 @@ const SearchBar = ({listItems, addListItem, removeListItem, session}: SearchbarP
                     <div key={result.id} className='border border-black flex justify-start gap-8 items-center h-30 relative'>
                           <Image className='overflow-hidden' height={100} width={213} src={`https://image.tmdb.org/t/p/w342/${result.backdrop_path}` || ""} alt={result.name || "poster"} />
                           <h2 className="font-bold w-30">{result.name}</h2>
-                          {listItem ? <FontAwesomeIcon icon={faMinus} onClick={()=> removeListItem(listItem.id)}/> : <FontAwesomeIcon icon={faPlus} onClick={()=> addListItem(newListItem)}/>}
+                          {listItem ? <FontAwesomeIcon icon={faMinus} onClick={()=> removeListItem({userID:listItem.userID, mediaID: listItem.mediaID })}/> : <FontAwesomeIcon icon={faPlus} onClick={()=> addListItem(newListItem)}/>}
                     </div>
                 )
           }else{

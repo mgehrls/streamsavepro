@@ -5,18 +5,18 @@ import {trpc} from "../utils/trpc"
 import { useRouter } from 'next/router';
 import type { SmallDisplayProps } from '../types/interface';
 
-const SmallMediaDisplay = ({title, posterPath, lastSeen, listID, removeListItem}: SmallDisplayProps)=>{
+const SmallMediaDisplay = ({title, posterPath, lastSeen, removeListItem, userID, mediaID }: SmallDisplayProps)=>{
     const [hide, setHide] = useState(true)
     const router = useRouter()
     const updateListItem = trpc.listItem.updateListItem.useMutation({onSuccess(){router.reload()}})
     let dateDisplay
 
     if(lastSeen !== undefined && lastSeen !== null){
-        dateDisplay = <input onChange={(e) => updateListItem.mutate({id: listID, data:{ lastSeen: e.target.value} })} className={styles.listItemLastSeen} value={lastSeen} type={"date"}/>
+        dateDisplay = <input onChange={(e) => updateListItem.mutate({userID: userID, mediaID:mediaID, lastSeen: e.target.value })} className={styles.listItemLastSeen} value={lastSeen} type={"date"}/>
     }else if(hide){
         dateDisplay = <p className={styles.listItemLastSeenFacade} onClick={() => setHide(!hide)}>last watched?</p>
     }else{
-        dateDisplay = <input onChange={(e) => updateListItem.mutate({id: listID, data:{ lastSeen: e.target.value} })} autoFocus className={styles.listItemLastSeen} type={"date"}/>
+        dateDisplay = <input onChange={(e) => updateListItem.mutate({userID: userID, mediaID:mediaID, lastSeen: e.target.value })} autoFocus className={styles.listItemLastSeen} type={"date"}/>
     }
 
     if(posterPath !== undefined){
@@ -33,7 +33,7 @@ const SmallMediaDisplay = ({title, posterPath, lastSeen, listID, removeListItem}
                     <div className={styles.listItemLastSeenContainer}>
                         {dateDisplay}
                     </div>
-                    <p className={styles.listItemRemove} onClick={()=> removeListItem(listID)}>remove</p>
+                    <p className={styles.listItemRemove} onClick={()=> removeListItem({userID, mediaID})}>remove</p>
                 </div>
             </div>
     )}else{

@@ -12,7 +12,6 @@ import { type NextPage } from "next";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
-import { useRouter } from "next/router";
 
 import type { Media } from "../types/interface";
 
@@ -20,7 +19,6 @@ const Home: NextPage = () => {
   const session = useSession()
   const utils = trpc.useContext()
   const user = trpc.user.getUser.useQuery()
-  const router = useRouter()
   const listItems = trpc.listItem.getUserListItems.useQuery()
   const { data: trending } = trpc.media.getTrendingData.useQuery()
 
@@ -46,8 +44,8 @@ const Home: NextPage = () => {
       addListItemToDB.mutate(newListItem, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
       return addListItemToDB.isLoading ? true : false
     }
-    const removeListItem = (id:string) =>{
-      removeListItemFromDB.mutate(id, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
+    const removeListItem = (itemToRemove:{userID: string, mediaID: number} ) =>{
+      removeListItemFromDB.mutate(itemToRemove, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
       return removeListItemFromDB.isLoading ? true : false
     }
     const classes = {
@@ -133,6 +131,11 @@ const Home: NextPage = () => {
            
           </div>
         </body>
+        <footer className="w-full h-16 bg-slate-600 flex justify-center items-center">
+        <Link className="text-white" href='https://www.themoviedb.org/'>
+            Images and data curtosy of themoviedb.org
+        </Link>
+        </footer>
       </>
     );
   }};

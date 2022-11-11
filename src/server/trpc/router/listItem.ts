@@ -13,29 +13,28 @@ export const listItemRouter = router({
      
     }),
   removeListItem: protectedProcedure
-    .input(z.string())
+    .input(z.object({userID: z.string(), mediaID: z.number()}))
     .mutation(async (req)=>{
       await req.ctx.prisma.listItem.delete({
         where:{
-          id: req.input
+          userID_mediaID: req.input
         }
         
       })
     }),
   updateListItem: protectedProcedure
     .input(z.object({
-      id:z.string(), 
-      data:z.object({
-        lastSeen: z.string()
-      })
+      userID:z.string(),
+      mediaID: z.number(), 
+      lastSeen: z.string()
     }))
     .mutation(async (req)=>{
       await req.ctx.prisma.listItem.update({
         where:{
-          id: req.input.id
+          userID_mediaID: {userID: req.input.userID, mediaID: req.input.mediaID}
         },
         data:{
-          lastSeen: req.input.data.lastSeen 
+          lastSeen: req.input.lastSeen 
         }
       })
     }),

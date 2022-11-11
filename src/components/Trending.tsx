@@ -19,18 +19,8 @@ function Trending({trending, listItems, addListItem, removeListItem, user}: Tren
               key={result.id} 
               result={result}  />
           )
-        }else if(listItems === undefined){
-          return(
-            <Result 
-              key={result.id} 
-              result={result} 
-              user={user} 
-              addListItem={addListItem}
-              removeListItem={removeListItem}
-              listItem={undefined} />
-          )
         }else{
-          const listItem = listItems[listItems.findIndex(item => item.mediaID === result.id)]
+          const listItem = listItems ? listItems[listItems.findIndex(item => item.mediaID === result.id)] : undefined
           return(
             <Result 
               key={result.id} 
@@ -102,7 +92,7 @@ const Result = ({result, listItem, user, addListItem, removeListItem}: ResultPro
   const btn = whichBtn()
 
   function whichBtn(){
-  if(!listItem){
+  if(!listItem){ 
       return <FontAwesomeIcon onClick={()=> handleAdd(newListItem)} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faHeart}/>
     }else{
       return <FontAwesomeIcon onClick={()=>{ handleRemove(listItem.id)}} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faFilledHeart}/>
