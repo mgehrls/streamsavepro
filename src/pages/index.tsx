@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faChartLine, faList, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Trending from "../components/Trending";
-import SidebarList from "../components/SidebarList";
+import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 
 import { type NextPage } from "next";
@@ -104,12 +104,13 @@ const Home: NextPage = () => {
         </header>
         <body className="bg-slate-300 mt-16 z-0">
           <div className="flex justify-center max-w-8xl">
+          {listItems.data && <List listItems={listItems.data} removeListItem={removeListItem} />}
             {
               !showTrending 
 
               ? 
 
-              <div style={{height:"calc(100vh - 4rem)"}} className="max-w-10x w-full flex flex-col justify-center items-center p-10">
+              <div style={{height:"calc(100vh - 4rem)"}} className="hidden md:flex max-w-10x w-full flex-col justify-center items-center p-10">
                 <h1 style={{textShadow:"2px 2px 2px rgba(0,0,0,.5), 4px 4px 4px rgba(0,0,0,.3)"}} className="font-bold text-5xl max-w-3xl text-orange-600 tracking-tight text-start py-8">Welcome to <span>Streamsave!</span></h1>
                 <div className="grid sm:grid-cols-3 gap-4">
                   <div onClick={()=> document.getElementById("searchBar")?.focus()} className="w-24 h-28 grid place-content-center bg-pink-700 hover:scale-125 transition-all p-2 cursor-pointer">
@@ -127,7 +128,7 @@ const Home: NextPage = () => {
 
               <Trending trending={trending} listItems={listItems.data ? listItems.data : undefined} addListItem={addListItem} removeListItem={removeListItem} session={session.data} user={user.data ? user.data : null} />
             }
-            {listItems.data && <SidebarList listItems={listItems.data} removeListItem={removeListItem} />}
+           
            
           </div>
         </body>

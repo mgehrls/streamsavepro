@@ -165,7 +165,7 @@ addListItem: (newListItem: {
 removeListItem:(data:{userID: string, mediaID:number}) => boolean;
 session: Session | null
 }
-export interface SideBarPropTypes {
+export interface ListPropTypes {
   listItems:(ListItem & {
     media: Media;
 })[] | undefined;
