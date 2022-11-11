@@ -69,13 +69,6 @@ const Result = ({result, listItem, user, addListItem, removeListItem}: ResultPro
   const type = result.media_type !== undefined ? result.media_type : ""
   const backdropPath = result.backdrop_path !== undefined ? `https://image.tmdb.org/t/p/w342/${result.backdrop_path}` : null
   const posterPath = result.poster_path!== undefined ? `https://image.tmdb.org/t/p/w342/${result.poster_path}` : null
-  
-  const handleAdd = (itemToAdd:{media:Media, userID:string}) =>{
-    addListItem(itemToAdd)
-  }
-  const handleRemove = (id:string) =>{
-    removeListItem(id)
-  }
 
   const newListItem: {media:Media, userID:string} = {
     media:{
@@ -93,9 +86,9 @@ const Result = ({result, listItem, user, addListItem, removeListItem}: ResultPro
 
   function whichBtn(){
   if(!listItem){ 
-      return <FontAwesomeIcon onClick={()=> handleAdd(newListItem)} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faHeart}/>
+      return <FontAwesomeIcon onClick={()=> addListItem(newListItem)} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faHeart}/>
     }else{
-      return <FontAwesomeIcon onClick={()=>{ handleRemove(listItem.id)}} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faFilledHeart}/>
+      return <FontAwesomeIcon onClick={()=>{ removeListItem({userID: user.id, mediaID: result.id})}} className='absolute bottom-3 right-3 cursor-pointer hover:scale-125 text-red-700 shadow-lg' icon={faFilledHeart}/>
     }
   }
     return(
