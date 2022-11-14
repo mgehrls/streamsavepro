@@ -108,7 +108,7 @@ useEffect(()=>{
                     type="search" 
                     placeholder="Search StreamSave..."/>
             </div>
-            <div className={loading === "none" ? "opacity-0" : 'w-10/12 bg-slate-900 overflow-y-scroll absolute min-w-min md:w-1/2 z-50 mt-12'}>
+            <div className={loading === "none" ? "opacity-0" : 'w-10/12 bg-slate-900 absolute min-w-min md:w-1/2 z-50 mt-12'}>
                     {
                       searchResults?.results.slice(0,4).map((result)=>{
                         const id = result.id
@@ -179,7 +179,7 @@ useEffect(()=>{
                                 } 
                               }
                                 return (
-                                    <div key={result.id} className='m-1 gap-1 flex justify-between items-center overflow-y-scroll relative w-full'>
+                                    <div key={result.id} className='m-1 gap-1 flex justify-between items-center relative w-full'>
                                           <div style={{aspectRatio:"16:9",minWidth:"120px", width:"120px", maxWidth:"120px", height:"100%"}} className="flex justify-center items-center">
                                             <Image objectFit="true" className='overflow-hidden' height={100} width={213} src={`https://image.tmdb.org/t/p/w342/${result.backdrop_path}` || ""} alt={result.name || "poster"} />
                                           </div>
