@@ -246,7 +246,7 @@ useEffect(()=>{
                     && 
                     listItems.data.map((item)=>{
                       return(
-                        <Item item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} />
+                        <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} />
                       )})
                   } 
                 </div>
