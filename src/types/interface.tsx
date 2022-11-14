@@ -96,13 +96,13 @@ export interface SearchResultProps {
 }
 
 export interface SmallDisplayProps{
-  title:string;
-  backdropPath?:string;
-  posterPath?:string;
-  userID:string;
-  mediaID: number;
-  lastSeen?: string | null;
+  item: ListItem & {media: Media;}
   removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+  updateListItemDate:(listItemToUpdate: {
+    userID: string;
+    mediaID: number;
+    lastSeen: string;
+  }) => void;
 }
 export interface HeaderPropType {
   signIn:<P extends RedirectableProviderType | undefined = undefined>(provider?: LiteralUnion<P extends RedirectableProviderType ? P | BuiltInProviderType : BuiltInProviderType>, options?: SignInOptions, authorizationParams?: SignInAuthorizationParams)=> Promise<P extends RedirectableProviderType ? SignInResponse | undefined : undefined>,
@@ -163,11 +163,17 @@ addListItem: (newListItem: {
   userID: string;
 }) => boolean;
 removeListItem:(data:{userID: string, mediaID:number}) => boolean;
-session: Session | null
+session: Session | null;
+isLoading:boolean;
 }
 export interface ListPropTypes {
   listItems:(ListItem & {
     media: Media;
 })[] | undefined;
 removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+updateListItemDate:(listItemToUpdate: {
+  userID: string;
+  mediaID: number;
+  lastSeen: string;
+}) => void;
 }
