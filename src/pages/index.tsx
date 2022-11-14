@@ -242,7 +242,7 @@ useEffect(()=>{
 
                       if(item.media.posterPath !== undefined && item.media.posterPath !== null){
                         return (
-                      <div className="p-2 flex relative w-full bg-slate-800 border-b-2 border-b-white max-w-md">
+                      <div key={item.mediaID} className="p-2 flex relative w-full bg-slate-800 border-b-2 border-b-white max-w-md">
                           <Image
                               src={item.media.posterPath}
                               alt="poster"
