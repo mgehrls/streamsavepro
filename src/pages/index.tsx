@@ -48,7 +48,7 @@ useEffect(()=>{
   setLoading("none")
 }, [debouncedSearch])
   
-  if(!trending){
+  if(!trending || session.status === "loading"){
     
     return (
       <div className="w-screen h-screen bg-slate-600 flex flex-col gap-8 justify-center items-center">
@@ -216,7 +216,7 @@ useEffect(()=>{
                 </div>
               </div>
               {/* dropdown menu */
-              session.data ?
+              session.status === "authenticated" ?
               <>
                   <div className={showMenu? "w-12" : "hidden"}>
 
