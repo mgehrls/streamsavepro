@@ -186,7 +186,11 @@ useEffect(()=>{
                                           <div>
                                             <h2 className="font-bold">{result.name}</h2>
                                           </div>
-                                          {listItem 
+                                          {updateListItem.isLoading
+                                          ?
+                                          <FontAwesomeIcon icon={faSpinner} spin />
+                                          :
+                                          listItem 
                                           ? 
                                           <div>
                                             <div id="removeBtn" className="cursor-pointer p-4 active:scale-75" onClick={()=> handleRemove()}>
@@ -206,11 +210,12 @@ useEffect(()=>{
                             return(
                                 <div key={result.id}>Error</div>
                             )
-                          }})
+                          }})/* End of Searchbar */
                     }
                 </div>
               </div>
-              {session.data ?
+              {/* dropdown menu */
+              session.data ?
               <>
                   <div className={showMenu? "w-12" : "hidden"}>
 
