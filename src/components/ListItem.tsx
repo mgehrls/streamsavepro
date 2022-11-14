@@ -17,6 +17,7 @@ interface ListItemPropTypes  {
 
 const Item = ({item, removeListItem, updateListItemDate}: ListItemPropTypes) =>{
     const [isLoading, setIsLoading] = useState(false)
+    const [hide, setHide] = useState(false)
 
         if(item.media.posterPath !== undefined && item.media.posterPath !== null){
             return (
@@ -40,8 +41,11 @@ const Item = ({item, removeListItem, updateListItemDate}: ListItemPropTypes) =>{
                         value={item.lastSeen} 
                         type={"date"}/>
                      :
-        
+                     !hide ?
+                        <p className="text-white italic opacity-50 hover:opacity-100 cursor-pointer" onClick={()=> setHide(true)}>last watched?</p>
+                        :
                       <input 
+                        autoFocus
                         onChange={(e) => {updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })}}
                         className="absolute text-white bg-transparent outline-none border-none opacity-50 hover:opacity-full"  
                         type={"date"}/>

@@ -13,6 +13,7 @@ import { trpc } from "../utils/trpc";
 
 import type { Media, SearchData } from "../types/interface";
 import useDebounce from "../utils/useDebounce";
+import Item from "../components/ListItem";
 
 const Home: NextPage = () => {
   const session = useSession()
@@ -239,49 +240,14 @@ useEffect(()=>{
           {listItems.data 
             && 
             <div id='list' className='flex flex-wrap gap-1 justify-start items-center text-black bg-slate-400'>
-              <h3>Your List</h3>
+              <h3 className="align-self-center ">Your List</h3>
                 <div className='flex flex-wrap gap-1'>
                   {listItems.data 
                     && 
                     listItems.data.map((item)=>{
-
-                      if(item.media.posterPath !== undefined && item.media.posterPath !== null){
-                        return (
-                      <div key={item.mediaID} className="p-2 flex relative w-full bg-slate-800 border-b-2 border-b-white max-w-md">
-                          <Image
-                              src={item.media.posterPath}
-                              alt="poster"
-                              width={100}
-                              height={150}/>
-                          <div className="flex flex-col justify-center gap-4 p-3 w-full">
-                              <h3 className='text-white font-bold'>{item.media.title}</h3>
-                              <div className="relative">
-                                  {updateListItem.isLoading ?
-                                  <FontAwesomeIcon icon={faSpinner} spin/>:
-                                  item.lastSeen !== undefined && item.lastSeen !== null 
-                                  ? 
-                                  <input 
-                                    onChange={(e) => {
-                                      
-                                      updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })
-                                      
-                                    }}
-                                    className="absolute text-white bg-transparent outline-none border-none" 
-                                    value={item.lastSeen} 
-                                    type={"date"}/>
-                                 :
-                                  <p className="cursor-pointer p-0 m-0 text-gray-400 italic" onClick={() => updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: "" })}>last watched?</p>
-                                  }
-                              </div>
-                              <p className="cursor-pointer text-red-700 absolute bottom-2 right-2" onClick={()=> removeListItem({userID: item.userID, mediaID: item.mediaID})}>remove</p>
-                          </div>
-                      </div>
-                          )}else{
-                              return(
-                      <></>
-                              )
-                          }
-                      })
+                      return(
+                        <Item item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} />
+                      )})
                   } 
                 </div>
             </div>/* end of your list if it's there. */
