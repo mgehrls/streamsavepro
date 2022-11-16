@@ -1,6 +1,6 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ListItem } from "@prisma/client";
+import type { ListItem } from "@prisma/client";
 import Image from "next/image"
 import { useEffect, useState } from "react";
 import type { Media } from "../types/interface"

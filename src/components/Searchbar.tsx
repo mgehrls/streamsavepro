@@ -1,9 +1,9 @@
 import { faMagnifyingGlass, faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Media } from "@prisma/client"
+import type { Media } from "@prisma/client"
 import { signIn, useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
-import { SearchData } from "../types/interface"
+import type { SearchData } from "../types/interface"
 import useDebounce from "../utils/useDebounce"
 import Image from "next/image"
 import { trpc } from "../utils/trpc"
@@ -75,7 +75,7 @@ const Searchbar = () =>{
                     )
                 }else if(listItems.data !== undefined && listItems.data[0] !== undefined){
                     return (
-                      <SearchResult listItems={listItems.data} result={result} addListItem={addListItem} removeListItem={removeListItem} setSearch={setSearch} loading={loading} />
+                      <SearchResult key={result.id} listItems={listItems.data} result={result} addListItem={addListItem} removeListItem={removeListItem} setSearch={setSearch} loading={loading} />
                     )
                   }})/* End of Searchbar */
             }
