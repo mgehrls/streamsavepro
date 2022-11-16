@@ -2,18 +2,18 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightFromBracket, faChartLine, faList, faMagnifyingGlass, faMinus, faPlus, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faChartLine, faList, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Trending from "../components/Trending";
 
 import { type NextPage } from "next";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 
-import type { Media, SearchData } from "../types/interface";
-import useDebounce from "../utils/useDebounce";
+import type { Media } from "../types/interface";
 import Item from "../components/ListItem";
+import Searchbar from "../components/Searchbar";
 
 const Home: NextPage = () => {
   const session = useSession()
@@ -29,24 +29,7 @@ const Home: NextPage = () => {
   const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
   const updateListItem = trpc.listItem.updateListItem.useMutation()
   const [loading, setLoading] = useState<"success" | "loading" | "none">("none")
-  const [searchResults, setSearchResults] = useState<SearchData | null>(null)
-  const [search, setSearch] = useState<string | null>(null)
-  const apiKey = "4cc551bdbec360295f6123a443e43bb9"
-  const debouncedSearch: string = useDebounce(search, 500)
 
-  
-useEffect(()=>{
-  setLoading("loading")
-  setSearchResults(null)
-  async function fetchData(){
-    const searchItem = encodeURI(debouncedSearch)
-    const searchData = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=en-US&query=${searchItem}&page=1&include_adult=false`).then((res) => res.json()).catch((e)=> console.log(e))
-    setSearchResults(searchData)
-    setLoading("success")
-  }
-  if(debouncedSearch) fetchData()
-  setLoading("none")
-}, [debouncedSearch])
   
   if(!trending || session.status === "loading"){
     
@@ -60,15 +43,37 @@ useEffect(()=>{
   }else {
 
     const addListItem = (newListItem:{media:Media, userID:string}) =>{
-      addListItemToDB.mutate(newListItem, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
-      return addListItemToDB.isLoading ? true : false
+      setLoading("loading")
+      addListItemToDB.mutate(newListItem, {
+        onSuccess:async ()=>{ 
+          utils.listItem.getUserListItems.invalidate() 
+          setLoading("success")}, 
+        onError: async (err)=>{
+          console.log(err)
+          setLoading("none")
+        }})
     }
     const removeListItem = (itemToRemove:{userID: string, mediaID: number} ) =>{
-      removeListItemFromDB.mutate(itemToRemove, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
-      return removeListItemFromDB.isLoading ? true : false
+      setLoading("loading")
+      removeListItemFromDB.mutate(itemToRemove, {
+        onSuccess:async ()=>{ 
+          utils.listItem.getUserListItems.invalidate() 
+          setLoading("success")}, 
+        onError: async (err)=>{
+          console.log(err)
+          setLoading("none")
+        }})
     }
     const updateListItemDate = (listItemToUpdate:{userID: string, mediaID: number, lastSeen:string}) => {
-      updateListItem.mutate(listItemToUpdate, {onSuccess: async () =>{utils.listItem.getUserListItems.invalidate()}})
+      setLoading("loading")
+      updateListItem.mutate(listItemToUpdate, {
+        onSuccess:async ()=>{ 
+          utils.listItem.getUserListItems.invalidate() 
+          setLoading("success")}, 
+        onError: async (err)=>{
+          console.log(err)
+          setLoading("none")
+        }})
     }
     function getUserImageURL(){
         if(session){
@@ -97,124 +102,9 @@ useEffect(()=>{
             <h1>StreamSave</h1>
             </Link>
           </div>
-          {/* Searchbar starts here */}
-          <div className='flex flex-col relative w-full'>
-            <div className="relative h-12 flex justify-start items-center text-md text-white w-full">
-                <FontAwesomeIcon className="h-6 m-2 absolute" icon={faMagnifyingGlass}/>
-                <input
-                    id="searchBar" 
-                    className="w-full h-full pl-10 bg-zinc-900 text-white"
-                    onChange={(e)=> setSearch(e.target.value)}
-                    value={search || ""}
-                    type="search" 
-                    placeholder="Search StreamSave..."/>
-            </div>
-            <div className={loading === "none" ? "opacity-0" : 'w-10/12 bg-slate-900 absolute min-w-min md:w-1/2 z-50 mt-12'}>
-                    {
-                      searchResults?.results.slice(0,4).map((result)=>{
-                        const id = result.id
-                        const title = result.name ? result.name : ""
-                        const description = result.overview !== undefined ? result.overview : ""
-                        const type = result.media_type !== undefined ? result.media_type : ""
-                        const backdropPath = result.backdrop_path !== undefined ? `https://image.tmdb.org/t/p/w342/${result.backdrop_path}` : null
-                        const posterPath = result.poster_path!== undefined ? `https://image.tmdb.org/t/p/w342/${result.poster_path}` : null
-                  
-                        if(!session.data){
-                            return(
-                            <div key={result.id} className='border border-black flex justify-between items-center h-20 relative'>
-                                <Image height={100} width={50} src={`https://image.tmdb.org/t/p/w342/${result.poster_path}` || ""} alt={result.name || "poster"} />
-                                <h2>{result.name}</h2>
-                                <div className="p-4 cursor-pointer" onClick={()=>signIn()}>
-                                  <FontAwesomeIcon icon={faPlus} />
-                                </div>
-                            </div>
-                            )
-                        }else if(listItems.data !== undefined && listItems.data[0] === undefined && session.data?.user){
-                            const newListItem: {media:Media, userID:string} = {
-                                media:{
-                                    id,
-                                    title,
-                                    description,
-                                    type,
-                                    backdropPath,
-                                    posterPath
-                                },
-                                userID: session.data.user.id
-                              }
-                            return(
-                                <div key={result.id} className='border border-black flex justify-between items-center h-20 relative'>
-                                    <Image height={100} width={50} src={`https://image.tmdb.org/t/p/w342/${result.poster_path}` || ""} alt={result.name || "poster"} />
-                                    <h2>{result.name}</h2>
-                                    <div  onClick={()=>addListItem(newListItem)} className='cursor-pointer p-4'>
-                                      <FontAwesomeIcon icon={faPlus}/>
-                                    </div>
-                                </div>
-                                )
-                        }else if(listItems.data !== undefined && listItems.data[0] !== undefined){
-                            const listItem = listItems.data[listItems.data.findIndex(item => item.mediaID === result.id)]
-                            const newListItem: {media:Media, userID:string} = {
-                                media:{
-                                    id,
-                                    title,
-                                    description,
-                                    type,
-                                    backdropPath,
-                                    posterPath
-                                },
-                                userID: listItems.data[0].userID
-                              }
-                              const searchbarNode = document.getElementById("searchBar")
-                              const handleAdd = () =>{
-                                addListItem(newListItem)
-                                if(searchbarNode !== null){
-                                  setSearch(null)
-                                  searchbarNode.innerHTML=""
-                                } 
-                              }
-                              const handleRemove = () =>{
-                                if(listItem)
-                                removeListItem({userID:listItem.userID, mediaID: listItem.mediaID })
-                                setSearch(null)
-                                if(searchbarNode !== null){
-                                  searchbarNode.textContent = ""
-                                } 
-                              }
-                                return (
-                                    <div key={result.id} className='m-1 gap-1 flex justify-between items-center relative w-full'>
-                                          <div style={{aspectRatio:"16:9",minWidth:"120px", width:"120px", maxWidth:"120px", height:"100%"}} className="flex justify-center items-center">
-                                            <Image objectFit="true" className='overflow-hidden' height={100} width={213} src={`https://image.tmdb.org/t/p/w342/${result.backdrop_path}` || ""} alt={result.name || "poster"} />
-                                          </div>
-                                          <div>
-                                            <h2 className="font-bold">{result.name}</h2>
-                                          </div>
-                                          {updateListItem.isLoading
-                                          ?
-                                          <FontAwesomeIcon icon={faSpinner} spin />
-                                          :
-                                          listItem 
-                                          ? 
-                                          <div>
-                                            <div id="removeBtn" className="cursor-pointer p-4 active:scale-75" onClick={()=> handleRemove()}>
-                                              <FontAwesomeIcon icon={faMinus} />
-                                            </div> 
-                                          </div>
-                                          : 
-                                          <div>
-                                            <div className="cursor-pointer p-4" onClick={()=> handleAdd()}>
-                                              <FontAwesomeIcon icon={faPlus} />
-                                            </div>
-                                          </div>
-                                          }
-                                    </div>
-                                )
-                          }else{
-                            return(
-                                <div key={result.id}>Error</div>
-                            )
-                          }})/* End of Searchbar */
-                    }
-                </div>
-              </div>
+
+          <Searchbar/>
+
               {/* dropdown menu */
               session.status === "authenticated" ?
               <>
@@ -246,7 +136,7 @@ useEffect(()=>{
                     && 
                     listItems.data.map((item)=>{
                       return(
-                        <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} />
+                        <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} loading={loading} />
                       )})
                   } 
                 </div>

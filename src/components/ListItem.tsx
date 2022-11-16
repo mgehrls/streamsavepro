@@ -1,11 +1,12 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ListItem } from "@prisma/client";
 import Image from "next/image"
-import { useState } from "react";
-import type { ListItem, Media } from "../types/interface"
+import { useEffect, useState } from "react";
+import type { Media } from "../types/interface"
 
 interface ListItemPropTypes  {
-    removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+    removeListItem:(data:{userID: string, mediaID:number}) => void;
     updateListItemDate:(listItemToUpdate: {
       userID: string;
       mediaID: number;
@@ -13,11 +14,20 @@ interface ListItemPropTypes  {
     }) => void;
     item: ListItem & {
         media: Media;
-}}
+    }
+    loading: "loading" | "success" | "none";
+}
 
-const Item = ({item, removeListItem, updateListItemDate}: ListItemPropTypes) =>{
-    const [isLoading, setIsLoading] = useState(false)
+const Item = ({item, removeListItem, updateListItemDate, loading}: ListItemPropTypes) =>{
+    const [interacted, setInteracted] = useState(false)
     const [hide, setHide] = useState(false)
+
+
+    useEffect(()=>{
+        if(loading === "success" || loading === "none"){
+            setInteracted(false)
+        }
+    },[loading])
 
         if(item.media.posterPath !== undefined && item.media.posterPath !== null){
             return (
@@ -27,38 +37,54 @@ const Item = ({item, removeListItem, updateListItemDate}: ListItemPropTypes) =>{
                   alt="poster"
                   width={100}
                   height={150}/>
-              <div className="flex flex-col justify-center gap-4 p-3 w-full">
-                  <h3 className='text-white font-bold'>{item.media.title}</h3>
-                  <div className="relative">
-                      { isLoading ?
-                      <FontAwesomeIcon icon={faSpinner} spin/>
-                      :
-                      item.lastSeen !== undefined && item.lastSeen !== null 
-                      ? 
-                      <input 
-                        onChange={(e) => {updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })}}
-                        className="absolute text-white bg-transparent outline-none border-none opacity-50 hover:opacity-full" 
-                        value={item.lastSeen} 
-                        type={"date"}/>
-                     :
-                     !hide ?
-                        <p className="text-white italic opacity-50 hover:opacity-100 cursor-pointer" onClick={()=> setHide(true)}>last watched?</p>
-                        :
-                      <input 
-                        autoFocus
-                        onChange={(e) => {updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })}}
-                        className="absolute text-white bg-transparent outline-none border-none opacity-50 hover:opacity-full"  
-                        type={"date"}/>
-                      }
-                  </div>
-                  <p className="cursor-pointer text-red-700 absolute bottom-2 right-2" onClick={()=> removeListItem({userID: item.userID, mediaID: item.mediaID})}>remove</p>
+
+              {
+              interacted 
+              ?
+              <div className="w-full grid place-content-center text-white">
+                <FontAwesomeIcon icon={faSpinner} spin />
               </div>
-          </div>
-              )}else{
+                :
+                <div className="flex flex-col justify-center gap-4 p-3 w-full">
+                    <h3 className='text-white font-bold'>{item.media.title}</h3>
+                    <div className="relative">
+                     {
+                     item.lastSeen !== undefined && item.lastSeen !== null 
+                     ? 
+                     <input 
+                       onChange={(e) => {
+                           setInteracted(true)
+                           updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })
+                       }}
+                       className="absolute text-white bg-transparent outline-none border-none opacity-50 hover:opacity-full" 
+                       value={item.lastSeen} 
+                       type={"date"}/>
+                    :
+                    !hide ?
+                       <p className="text-white italic opacity-50 hover:opacity-100 cursor-pointer" onClick={()=> setHide(true)}>last watched?</p>
+                       :
+                     <input 
+                       autoFocus
+                       onChange={(e) => {
+                           setInteracted(true)
+                           updateListItemDate({userID: item.userID, mediaID:item.mediaID, lastSeen: e.target.value })
+                       }}
+                       className="absolute text-white bg-transparent outline-none border-none opacity-50 hover:opacity-full"  
+                       type={"date"}/>
+                     }
+                 </div>
+                 <p className="cursor-pointer text-red-700 absolute bottom-2 right-2" onClick={()=> {
+                   setInteracted(true)
+                   removeListItem({userID: item.userID, mediaID: item.mediaID})
+                   }}>X</p>
+             </div>}
+         </div>
+
+              )} else{
                   return(
-          <div style={{backgroundColor: "pink" }}>
-              <h3>{item.media.posterPath}</h3>
-          </div>
+                    <div style={{backgroundColor: "pink" }}>
+                        <h3>{item.media.posterPath}</h3>
+                    </div>
                   )
               }
           }

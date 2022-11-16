@@ -1,14 +1,9 @@
-import { User } from "@prisma/client";
+import { ListItem, User } from "@prisma/client";
 import { Session } from "next-auth/core/types";
 import { RedirectableProviderType, BuiltInProviderType } from "next-auth/providers";
 import { LiteralUnion, SignInOptions, SignInAuthorizationParams, SignInResponse, SignOutParams, SignOutResponse } from "next-auth/react";
 import { Dispatch, SetStateAction } from "react";
 
-export interface ListItem{
-    userID: string;
-    mediaID: number;
-    lastSeen: string | null;
-}
 export interface Media {
     id: number;
     title: string;
@@ -61,7 +56,6 @@ export interface ShowData{
   lastSeen?:string;
   tier?:"s" | "a" | "b" | "c" | "g";
 }
-
 export interface ResultProps{
   result: SearchResult;
   listItem?: (ListItem & {
@@ -81,23 +75,24 @@ export interface SearchProps{
   addListItem: (newListItem: {
     media: Media;
     userID: string;
-  }) => boolean;
-  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+  }) => void;
+  removeListItem:(data:{userID: string, mediaID:number}) => void;
 }
 export interface SearchResultProps {
   result: SearchResult;
-  listItem?: ListItem & {media: Media;};
-  userID:string | null;
+  listItems: (ListItem & {media: Media})[];
   addListItem: (newListItem: {
     media: Media;
     userID: string;
-  }) => boolean;
-  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+  }) => void;
+  removeListItem:(data:{userID: string, mediaID:number}) => void;
+  setSearch: Dispatch<SetStateAction<string | null>>;
+  loading: "success" | "loading" | "none";
 }
 
 export interface SmallDisplayProps{
   item: ListItem & {media: Media;}
-  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+  removeListItem:(data:{userID: string, mediaID:number}) => void;
   updateListItemDate:(listItemToUpdate: {
     userID: string;
     mediaID: number;
@@ -116,8 +111,8 @@ export interface HeaderPropType {
   addListItem: (newListItem: {
     media: Media;
     userID: string;
-}) => boolean;
-removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+}) => void;
+removeListItem:(data:{userID: string, mediaID:number}) => void;
 }
 
 export interface ProfileSectionPropTypes {
@@ -132,9 +127,6 @@ export interface ProfileSectionPropTypes {
   show: boolean,
   setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
-export interface UnauthedResultProps{
-  result: SearchResult;
-}
 export interface TrendingPropTypes{
   trending: {
       series: SearchResult[];
@@ -146,13 +138,10 @@ export interface TrendingPropTypes{
   addListItem: (newListItem: {
     media: Media;
     userID: string;
-}) => boolean;
-removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+}) => void;
+removeListItem:(data:{userID: string, mediaID:number}) => void;
   session: Session | null;
   user: User | null;
-}
-export interface UnauthedResultProps{
-  result: SearchResult;
 }
 export interface SearchbarPropType{
   listItems: (ListItem & {
@@ -161,8 +150,8 @@ export interface SearchbarPropType{
 addListItem: (newListItem: {
   media: Media;
   userID: string;
-}) => boolean;
-removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+}) => void;
+removeListItem:(data:{userID: string, mediaID:number}) => void;
 session: Session | null;
 isLoading:boolean;
 }
@@ -170,7 +159,7 @@ export interface ListPropTypes {
   listItems:(ListItem & {
     media: Media;
 })[] | undefined;
-removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+removeListItem:(data:{userID: string, mediaID:number}) => void;
 updateListItemDate:(listItemToUpdate: {
   userID: string;
   mediaID: number;
