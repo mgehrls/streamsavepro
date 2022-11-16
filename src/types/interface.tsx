@@ -65,8 +65,8 @@ export interface ResultProps{
   addListItem: (newListItem: {
     media: Media;
     userID: string;
-  }) => boolean;
-  removeListItem:(data:{userID: string, mediaID:number}) => boolean;
+  }) => void;
+  removeListItem:(data:{userID: string, mediaID:number}) => void;
 }
 export interface SearchProps{
   searchData: SearchData;

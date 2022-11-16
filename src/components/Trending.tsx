@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faFilledHeart } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import type { TrendingPropTypes, Media, ResultProps, UnauthedResultProps,} from '../types/interface';
+import type { TrendingPropTypes, Media, ResultProps, SearchResult,} from '../types/interface';
 import Image from "next/image"
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
@@ -37,6 +37,10 @@ function Trending({trending, listItems, addListItem, removeListItem, user}: Tren
 }
 
 export default Trending;
+
+interface UnauthedResultProps{
+  result: SearchResult;
+}
 
 const UnauthedResult = ({result}: UnauthedResultProps) =>{
   const [hoverRef, isHovered] = useHover()

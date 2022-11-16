@@ -73,7 +73,7 @@ const Item = ({item, removeListItem, updateListItemDate, loading}: ListItemPropT
                        type={"date"}/>
                      }
                  </div>
-                 <p className="cursor-pointer text-red-700 absolute bottom-2 right-2" onClick={()=> {
+                 <p className="cursor-pointer text-red-700 absolute bottom-2 right-2 opacity-60 hover:opacity-100" onClick={()=> {
                    setInteracted(true)
                    removeListItem({userID: item.userID, mediaID: item.mediaID})
                    }}>X</p>
