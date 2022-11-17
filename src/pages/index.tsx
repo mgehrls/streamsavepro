@@ -21,6 +21,8 @@ const Home: NextPage = () => {
   const user = trpc.user.getUser.useQuery()
   const listItems = trpc.listItem.getUserListItems.useQuery()
   const { data: trending } = trpc.media.getTrendingData.useQuery()
+  const [sorted, setSorted] = useState<"recent" | "abc">("recent")
+  const [ascending, setAscending] = useState(true)
   
   const [showMenu, setShowMenu] = useState(false)
   const [showTrending, setShowTrending] = useState(false)
@@ -127,26 +129,75 @@ const Home: NextPage = () => {
         <body className="bg-slate-300 mt-16 z-0">
           <div className="flex flex-col md:flex-row justify-center max-w-8xl">
             
-          {listItems.data 
-            && 
-            <div id='list' className='flex flex-wrap gap-1 justify-center items-center text-black bg-slate-400'>
+          {listItems.data && 
+            <div id='list' className='flex flex-wrap gap-1 justify-start items-center text-black bg-slate-400'>
               <div className="flex items-center justify-between w-full p-4">
                 <h3 className="font-bold text-white">Your List</h3>
                 <div className="flex flex-col justify-center items-center">
                   <p>sort by</p>
                   <div className="flex gap-4">
-                    <p>last seen</p>
-                    <p>A,B,C...</p>
+                    <p className="p-2 m-0 cursor-pointer bg-slate-800 text-white" 
+                      onClick={
+                        ()=> {if(sorted === "recent"){
+                          setAscending(!ascending)
+                        }else{
+                          setSorted("recent")
+                        }
+                          }}>last seen</p>
+                    <p className="p-2 m-0 cursor-pointer bg-slate-800 text-white"
+                    onClick={
+                      ()=> {if(sorted === "abc"){
+                        setAscending(!ascending)
+                      }else{
+                        setSorted("abc")
+                      }
+                        }}>A,B,C...</p>
                   </div>
                 </div>
               </div>
-                <div className='flex flex-wrap gap-1'>
-                  {listItems.data 
-                    && 
-                    listItems.data.map((item)=>{
+                <div className='p-2 grid'>
+                  {listItems.data && sorted === "recent" && ascending ?
+                    listItems.data.sort((a, b)=>{
+                      if(a.lastSeen && b.lastSeen){
+                        Date.parse(a.lastSeen) < Date.parse(b.lastSeen) ? -1 : Date.parse(a.lastSeen) > Date.parse(b.lastSeen) ? 1 : 0
+                      }else if(a.lastSeen && !b.lastSeen){
+                        return 1
+                      }else if(!a.lastSeen && b.lastSeen){
+                        return -1
+                      }else{
+                        return 0
+                      }
+                      console.log("none of this ran")
+                      return 0
+                    }).map((item)=>{
                       return(
                         <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} loading={loading} />
                       )})
+                    : listItems.data && sorted === "recent" && !ascending ?
+                    listItems.data.sort((a, b)=>{
+                      if(a.lastSeen && b.lastSeen){
+                        Date.parse(a.lastSeen) < Date.parse(b.lastSeen) ? -1 : Date.parse(a.lastSeen) > Date.parse(b.lastSeen) ? 1 : 0
+                      }else if(a.lastSeen && !b.lastSeen){
+                        return 1
+                      }else if(!a.lastSeen && b.lastSeen){
+                        return -1
+                      }else{
+                        return 0
+                      }
+                      return 0
+                    }).map((item)=>{
+                      return(
+                        <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} loading={loading} />
+                      )}).reverse()
+                    : 
+                    listItems.data.sort((a, b) =>{
+                      if(a.media.title < b.media.title) return  1 
+                      if(a.media.title > b.media.title) return -1 
+                      return 0
+                    }).map((item)=>{
+                      return(
+                        <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} loading={loading} />
+                      )}).reverse()
                   } 
                 </div>
             </div>/* end of your list if it's there. */
