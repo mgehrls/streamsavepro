@@ -10,7 +10,7 @@ export const listItemRouter = router({
          },include:{
            media:true
          }, orderBy:{
-           lastSeen: "asc"
+           lastSeen:"asc"
          }})
     }),
   removeListItem: protectedProcedure
