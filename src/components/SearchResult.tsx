@@ -1,6 +1,6 @@
 import { faSpinner, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Media, SearchResultProps } from "../types/interface"
+import type { Media, SearchResultProps } from "../types/interface"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 

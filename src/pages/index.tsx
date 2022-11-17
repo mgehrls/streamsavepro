@@ -129,8 +129,17 @@ const Home: NextPage = () => {
             
           {listItems.data 
             && 
-            <div id='list' className='flex flex-wrap gap-1 justify-start items-center text-black bg-slate-400'>
-              <h3 className="align-self-center ">Your List</h3>
+            <div id='list' className='flex flex-wrap gap-1 justify-center items-center text-black bg-slate-400'>
+              <div className="flex items-center justify-between w-full p-4">
+                <h3 className="font-bold text-white">Your List</h3>
+                <div className="flex flex-col justify-center items-center">
+                  <p>sort by</p>
+                  <div className="flex gap-4">
+                    <p>last seen</p>
+                    <p>A,B,C...</p>
+                  </div>
+                </div>
+              </div>
                 <div className='flex flex-wrap gap-1'>
                   {listItems.data 
                     && 

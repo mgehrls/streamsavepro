@@ -4,13 +4,14 @@ import { z } from "zod";
 
 export const listItemRouter = router({
   getUserListItems: protectedProcedure
-    .query(async ({ctx}) => {
-        return await ctx.prisma.listItem.findMany({where:{
-          userID: ctx.session.user.id
-        },include:{
-          media:true
-        }})
-     
+    .query(async (req) => {
+         return await req.ctx.prisma.listItem.findMany({where:{
+           userID: req.ctx.session.user.id
+         },include:{
+           media:true
+         }, orderBy:{
+           lastSeen: "asc"
+         }})
     }),
   removeListItem: protectedProcedure
     .input(z.object({userID: z.string(), mediaID: z.number()}))
