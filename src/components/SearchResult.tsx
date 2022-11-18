@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 const SearchResult = ({listItems, result, addListItem, removeListItem, setSearch, loading}: SearchResultProps) =>{
     const [interacted, setInteracted] = useState(false)
     const listItem = listItems[listItems.findIndex(item => item.mediaID === result.id)]
+    const status = listItem ? true : false
     const id = result.id
     const title = result.name ? result.name : ""
     const description = result.overview !== undefined ? result.overview : ""
@@ -21,9 +22,12 @@ const SearchResult = ({listItems, result, addListItem, removeListItem, setSearch
             setInteracted(false)
         }
     }, [loading])
-
-
-      const searchbarNode = document.getElementById("searchBar")
+    useEffect(()=>{
+        if(status && listItem || !status && !listItem){
+          setInteracted(false)
+        }
+    }, [status])
+    
       const handleAdd = () =>{
         setInteracted(true)
         if(listItems[0]){
@@ -40,19 +44,12 @@ const SearchResult = ({listItems, result, addListItem, removeListItem, setSearch
               }
               addListItem(newListItem)
         }
-        if(searchbarNode !== null){
-          setSearch(null)
-          searchbarNode.innerHTML=""
-        } 
+
       }
       const handleRemove = () =>{
         setInteracted(true)
         if(listItem)
         removeListItem({userID:listItem.userID, mediaID: listItem.mediaID })
-        setSearch(null)
-        if(searchbarNode !== null){
-          searchbarNode.textContent = ""
-        } 
       }
         return (
             <div key={result.id} className='m-1 gap-1 flex justify-between items-center relative w-full'>

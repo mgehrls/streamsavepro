@@ -1,4 +1,4 @@
-import { faMagnifyingGlass, faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faPlus, faSpinner, faX } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { Media } from "@prisma/client"
 import { signIn, useSession } from "next-auth/react"
@@ -20,6 +20,7 @@ const Searchbar = () =>{
     const debouncedSearch: string = useDebounce(search, 500)
     const addListItemToDB = trpc.listItem.newListItem.useMutation()
     const removeListItemFromDB = trpc.listItem.removeListItem.useMutation()
+    const searchbarNode = document.getElementById("searchBar")
 
     const addListItem = (newListItem:{media:Media, userID:string}) =>{
         addListItemToDB.mutate(newListItem, {onSuccess:async ()=>{ utils.listItem.getUserListItems.invalidate()}})
@@ -54,12 +55,18 @@ const Searchbar = () =>{
             value={search || ""}
             type="search" 
             placeholder="Search StreamSave..."/>
+        {loading !== "none" ? <div onClick={()=>{
+          setSearch(null)
+          if(searchbarNode){
+            searchbarNode.innerHTML = ""
+          }
+        }} className="absolute top-3 right-0 w-8 h-12 text-white cursor-pointer"><FontAwesomeIcon icon={faX} /></div> : <></>}
     </div>
-    <div className={loading === "none" ? "opacity-0" : 'w-10/12 bg-slate-900 absolute min-w-min md:w-1/2 z-50 mt-12'}>
+    <div className={loading === "none" ? "opacity-0" : 'w-full bg-slate-900 absolute min-w-min md:w-1/2 z-50 mt-12'}>
             {
                 loading === "loading" 
                 ?
-                <div className="grid place-content-center"><FontAwesomeIcon icon={faSpinner} spin /></div> 
+                <div className="grid place-content-center h-16 w-full"><FontAwesomeIcon icon={faSpinner} spin /></div> 
                 :
               searchResults?.results.slice(0,4).map((result)=>{
           
