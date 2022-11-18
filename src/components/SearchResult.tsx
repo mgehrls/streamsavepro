@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 
 
-const SearchResult = ({listItems, result, addListItem, removeListItem, setSearch, loading}: SearchResultProps) =>{
+const SearchResult = ({listItems, result, addListItem, removeListItem, loading}: SearchResultProps) =>{
     const [interacted, setInteracted] = useState(false)
     const listItem = listItems[listItems.findIndex(item => item.mediaID === result.id)]
     const status = listItem ? true : false
@@ -26,7 +26,7 @@ const SearchResult = ({listItems, result, addListItem, removeListItem, setSearch
         if(status && listItem || !status && !listItem){
           setInteracted(false)
         }
-    }, [status])
+    }, [status, listItem])
     
       const handleAdd = () =>{
         setInteracted(true)

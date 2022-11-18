@@ -124,11 +124,11 @@ const Home: NextPage = () => {
               <button onClick={()=>signIn("google")}>Sign In w/ Google</button>
           }
         </header>
-        <body className="bg-slate-300 mt-16 z-0">
+        <body style={{minHeight:"calc(100vh - 128px)"}} className="bg-slate-300 mt-16 z-0">
           <div className="flex flex-col md:flex-row justify-center max-w-8xl">
             
           {listItems.data && 
-            <div id='list' className='flex flex-wrap justify-center m-0 items-start text-black bg-slate-500'>
+            <div id='list' style={{minHeight:"calc(100vh - 128px)"}} className='flex flex-wrap justify-center m-0 items-start text-black bg-slate-500'>
               <div className="flex items-center justify-between w-full m-0 p-4 border-b border-dotted border-white">
                 <h3 className="font-bold text-white m-0 p-0">Your List</h3>
                 <div className="flex flex-col m-0 p-0 justify-center items-center">
@@ -152,7 +152,7 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               </div>
-                <div className='p-2 grid divide-y divide-dotted'>
+              <div style={{maxHeight:"calc(100vh -192px)"}} className='p-2 h-full flex flex-col divide-y divide-dotted'>
                   {listItems.data && sorted === "recent" && ascending ?
                     listItems.data.sort((a, b)=>{
                       if(a.lastSeen && b.lastSeen){
@@ -196,6 +196,8 @@ const Home: NextPage = () => {
                         <Item key={item.mediaID} item={item} removeListItem={removeListItem} updateListItemDate={updateListItemDate} loading={loading} />
                       )}).reverse()
                   } 
+
+                  
                 </div>
             </div>/* end of your list if it's there. */
             }
@@ -207,7 +209,8 @@ const Home: NextPage = () => {
               ?
               <div style={{maxHeight:"calc(100vh - 4rem)"}} className="md:flex max-w-10x w-full flex-col justify-center items-center p-10">
               <h1 style={{textShadow:"2px 2px 2px rgba(0,0,0,.5)"}} className="font-bold text-5xl max-w-3xl text-slate-600 tracking-tight text-center py-8">Welcome to <span>Streamsave!</span></h1>
-              <div className="w-full grid grid-cols-3 gap-4">
+              <p className="hidden">👋Welcome to my site! Search and save your favorite shows, or make a list to watch!</p>
+              <div className="w-full flex justify-center gap-4">
                 <div onClick={()=> document.getElementById("searchBar")?.focus()} className="w-24 h-28 grid place-content-center rounded bg-gradient-to-t from-red-300  to-blue-500 hover:scale-125 transition-all p-2 cursor-pointer">
                   <FontAwesomeIcon className="text-white bg-slate-500 p-2 rounded-full" icon={faSearch} />
                 </div>
@@ -227,7 +230,7 @@ const Home: NextPage = () => {
            
           </div>
         </body>
-        <footer className="w-full h-16 bg-slate-600 flex justify-center items-center">
+        <footer className="w-full h-16 bg-slate-600 flex justify-center items-center z-10">
         <Link className="text-white" href='https://www.themoviedb.org/'>
             Images and data curtosy of themoviedb.org
         </Link>
