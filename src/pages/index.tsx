@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightFromBracket, faChartLine, faList, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faArrowUpAZ, faChartLine, faClockRotateLeft, faList, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Trending from "../components/Trending";
 
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <header className="flex justify-start items-center p-4 gap-4 bg-slate-600 fixed h-16 text-white top-0 z-50 w-screen" onClick={()=> showMenu && setShowMenu(false)}>
+        <header className="flex justify-start items-center p-5 gap-4 bg-slate-600 fixed h-16 text-white top-0 z-50 w-screen" onClick={()=> showMenu && setShowMenu(false)}>
           <div className='hidden md:block'>
             <Link  
               href={"/"} >
@@ -107,55 +107,52 @@ const Home: NextPage = () => {
 
           <Searchbar/>
 
-              {/* dropdown menu */
-              session.status === "authenticated" ?
-              <>
-                  <div className={showMenu? "w-12" : "hidden"}>
-
-                  </div>
-                  <div className={showMenu ? "absolute z-50 top-0 right-0 flex flex-col justify-start gap-6 items-center self-start bg-black max-w-min w-2/12 h-screen text-white" : "block"} onClick={()=> setShowMenu(!showMenu)}>
-                      <Image className={showMenu ? 'rounded-full max-h-full max-w-none m-2' : 'rounded-full max-h-full max-w-none'} onClick={()=> { setShowMenu(!showMenu) }} alt={"user profile from your email"} src={userImageURL} height={46} width={46} />
-                      <Link href={"/"} className={showMenu ? "flex flex-col justify-center items-between" : "hidden"}>     
-                          <FontAwesomeIcon className='w-6 cursor-pointer' icon={faList}/>
-                      </Link>
-                      <FontAwesomeIcon icon={faArrowRightFromBracket} className={showMenu ? "w-6 cursor-pointer justify-self-end" : "hidden"} onClick={()=>{signOut()}}/>
-                  </div>
-              </>
-              :
-                  <button onClick={()=>signIn("google")}>Sign In w/ Google</button>
-
-              }
+          {/* dropdown menu */
+          session.status === "authenticated" ?
+          <>
+              <div className={showMenu? "w-12" : "hidden"}>
+              </div>
+              <div className={showMenu ? "absolute z-50 top-0 right-0 flex flex-col justify-start gap-6 items-center self-start bg-black max-w-min w-2/12 h-screen text-white" : "block"} onClick={()=> setShowMenu(!showMenu)}>
+                  <Image className={showMenu ? 'rounded-full max-h-full max-w-none m-2' : 'rounded-full max-h-full max-w-none'} onClick={()=> { setShowMenu(!showMenu) }} alt={"user profile from your email"} src={userImageURL} height={46} width={46} />
+                  <Link href={"/"} className={showMenu ? "flex flex-col justify-center items-between" : "hidden"}>     
+                      <FontAwesomeIcon className='w-6 cursor-pointer' icon={faList}/>
+                  </Link>
+                  <FontAwesomeIcon icon={faArrowRightFromBracket} className={showMenu ? "w-6 cursor-pointer justify-self-end" : "hidden"} onClick={()=>{signOut()}}/>
+              </div>
+          </>
+          :
+              <button onClick={()=>signIn("google")}>Sign In w/ Google</button>
+          }
         </header>
         <body className="bg-slate-300 mt-16 z-0">
           <div className="flex flex-col md:flex-row justify-center max-w-8xl">
             
           {listItems.data && 
-            <div id='list' className='flex flex-wrap gap-1 justify-start items-center text-black bg-slate-400'>
-              <div className="flex items-center justify-between w-full p-4">
-                <h3 className="font-bold text-white">Your List</h3>
-                <div className="flex flex-col justify-center items-center">
-                  <p>sort by</p>
+            <div id='list' className='flex flex-wrap justify-center m-0 items-start text-black bg-slate-500'>
+              <div className="flex items-center justify-between w-full m-0 p-4 border-b border-dotted border-white">
+                <h3 className="font-bold text-white m-0 p-0">Your List</h3>
+                <div className="flex flex-col m-0 p-0 justify-center items-center">
                   <div className="flex gap-4">
-                    <p className="p-2 m-0 cursor-pointer bg-slate-800 text-white" 
+                    <FontAwesomeIcon icon={faClockRotateLeft} className="p-2 m-0 cursor-pointer bg-slate-800 rounded text-white" 
                       onClick={
                         ()=> {if(sorted === "recent"){
                           setAscending(!ascending)
                         }else{
                           setSorted("recent")
                         }
-                          }}>last seen</p>
-                    <p className="p-2 m-0 cursor-pointer bg-slate-800 text-white"
+                          }} />
+                    <FontAwesomeIcon icon={faArrowUpAZ} className="p-2 m-0 cursor-pointer bg-slate-800 rounded text-white"
                     onClick={
                       ()=> {if(sorted === "abc"){
                         setAscending(!ascending)
                       }else{
                         setSorted("abc")
                       }
-                        }}>A,B,C...</p>
+                        }}/>
                   </div>
                 </div>
               </div>
-                <div className='p-2 grid'>
+                <div className='p-2 grid divide-y divide-dotted'>
                   {listItems.data && sorted === "recent" && ascending ?
                     listItems.data.sort((a, b)=>{
                       if(a.lastSeen && b.lastSeen){
@@ -208,17 +205,17 @@ const Home: NextPage = () => {
             {
               !showTrending
               ?
-              <div style={{height:"calc(100vh - 4rem)"}} className="md:flex max-w-10x w-full flex-col justify-center items-center p-10">
-              <h1 style={{textShadow:"2px 2px 2px rgba(0,0,0,.5), 4px 4px 4px rgba(0,0,0,.3)"}} className="font-bold text-5xl max-w-3xl text-orange-600 tracking-tight text-start py-8">Welcome to <span>Streamsave!</span></h1>
-              <div className="grid sm:grid-cols-3 gap-4">
-                <div onClick={()=> document.getElementById("searchBar")?.focus()} className="w-24 h-28 grid place-content-center bg-pink-700 hover:scale-125 transition-all p-2 cursor-pointer">
-                  <FontAwesomeIcon icon={faSearch} />
+              <div style={{maxHeight:"calc(100vh - 4rem)"}} className="md:flex max-w-10x w-full flex-col justify-center items-center p-10">
+              <h1 style={{textShadow:"2px 2px 2px rgba(0,0,0,.5)"}} className="font-bold text-5xl max-w-3xl text-slate-600 tracking-tight text-center py-8">Welcome to <span>Streamsave!</span></h1>
+              <div className="w-full grid grid-cols-3 gap-4">
+                <div onClick={()=> document.getElementById("searchBar")?.focus()} className="w-24 h-28 grid place-content-center rounded bg-gradient-to-t from-red-300  to-blue-500 hover:scale-125 transition-all p-2 cursor-pointer">
+                  <FontAwesomeIcon className="text-white bg-slate-500 p-2 rounded-full" icon={faSearch} />
                 </div>
-                <div onClick={()=> setShowTrending(true)} className="w-24 h-28 grid place-content-center bg-pink-700 hover:scale-125 transition-all p-2 cursor-pointer">
-                  <FontAwesomeIcon icon={faChartLine} />
+                <div onClick={()=> setShowTrending(true)} className="rounded w-24 h-28 grid place-content-center bg-gradient-to-t from-red-300  to-blue-500 hover:scale-125 transition-all p-2 cursor-pointer">
+                  <FontAwesomeIcon className="text-white bg-slate-500 p-2 rounded-full" icon={faChartLine} />
                 </div>
-                <div className="w-24 h-28 grid place-content-center bg-pink-700 hover:scale-125 transition-all p-2 cursor-pointer" onClick={()=> signIn()}>
-                  <FontAwesomeIcon icon={faGoogle}  />Sign In</div>
+                <div className="w-24 h-28 grid place-content-center  bg-gradient-to-t from-red-300  to-blue-500 hover:scale-125 transition-all p-2 cursor-pointer rounded" onClick={()=> signIn()}>
+                  <FontAwesomeIcon className="text-white bg-slate-500 p-2 rounded-full" icon={faGoogle} /></div>
                 </div>
               </div>
               
